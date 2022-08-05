@@ -99,29 +99,21 @@ def session( time : str = "05:00:00", cpu : int = 1, memory : str = "15G", detac
     scale : str
         Use a pre-defined scale to avoid using manual specs.
         Available scales are:
-            -> L (Large)  = 10:00:00 | 20 | 100G
-
-            -> l          = 00:30:00 | 20 | 100G
-
-            -> B (Big)    = 10:00:00 | 10 | 50G
-
-            -> b          = 00:30:00 | 10 | 50G
-
-            -> M (Medium) = 10:00:00 | 5  | 15G
-
-            -> m          = 00:30:00 | 5  | 15G
-                
-            -> S (Small)  = 10:00:00 | 1  | 5G
-
-            -> s          = 00:30:00 | 1  | 5G
-            
-            -> T (Tiny)   = 10:00:00 | 1  | 1G
-
-            -> t          = 00:30:00 | 1  | 1G
-
-            -> M (Micro)  = 10:00:00 | 1  | 10M
-
-            -> m          = 00:30:00 | 1  | 10M
+        
+    | Symbol     | Time limit | CPUs | Memory |
+    | :--------- | :--------- | :--- | :----- |
+    | L (Large)  | 10:00:00   | 20   | 100G   |
+    | l          | 00:30:00   | 20   | 100G   |
+    | B (Big)    | 10:00:00   | 10   | 50G    |
+    | b          | 00:30:00   | 10   | 50G    |
+    | M (Medium) | 10:00:00   | 5    | 15G    |
+    | m          | 00:30:00   | 5    | 15G    |
+    | S (Small)  | 10:00:00   | 1    | 5G     |
+    | s          | 00:30:00   | 1    | 5G     |
+    | T (Tiny)   | 10:00:00   | 1    | 1G     |
+    | t          | 00:30:00   | 1    | 1G     |
+    | M (Micro)  | 10:00:00   | 1    | 10M    |
+    | m          | 00:30:00   | 1    | 10M    |
     """
     if scale is not None:
         time = scales[scale]["time"]

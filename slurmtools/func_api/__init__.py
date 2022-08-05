@@ -9,3 +9,4 @@ from .queue import queue, view_queue
 from .session import session
 from .submit import submit, CmdArgs
 from .SlurmJob import SlurmJob
+from .read import read_stdout, read_stderr
