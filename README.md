@@ -4,6 +4,9 @@ Some of these tools will be just (more readable) synonyms of conventional SLURM 
 
 Of course, the native SLURM CLI is more powerful and, naturally, not all functionalities will be available through `slurmtools`, however, the purpose of `slurmtools` is merely to provide an easier to handle SLURM interface for most users. 
 
+> ### Note:
+> If you do not wish to install the python package with the additional overhead and are only interested in the *self-refreshing queue* and/or the *srun-session maker*, there are `shell` scripts available to define these functions (almost identical to the python implementation). You can find these in the `pureshell` directory in this repository.
+
 ## Example usage:
 `slurmtools` offers the basic functionalities most users will use continuously when working with the SLURM job handler.
 
