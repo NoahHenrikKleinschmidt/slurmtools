@@ -25,15 +25,14 @@ setuptools.setup(
         "console_scripts": [
                                 "slurmtools = slurmtools.main:main",
 
-                                "viewmyqueue = slurmtools.main:_view_queue",
-                                "viewmyq = slurmtools.main:_view_queue",
-                                "vmyq = slurmtools.main:_view_queue",
+                                "viewmyqueue = slurmtools.cli_shortcuts:viewmyqueue",
+                                "viewmyq = slurmtools.cli_shortcuts:viewmyqueue",
+                                "vmyq = slurmtools.cli_shortcuts:viewmyqueue",
 
-                                "myqueue = slurmtools.main:_static_queue",
-                                "myq = slurmtools.main:_static_queue",
+                                "myqueue = slurmtools.cli_shortcuts:myqueue",
+                                "myq = slurmtools.cli_shortcuts:myqueue",
 
-                                "qrun = slurmtools.main:start_session",
-                                "ssession = slurmtools.main:start_session",
+                                "qrun = slurmtools.cli_shortcuts:qrun",
         ],
     },
 

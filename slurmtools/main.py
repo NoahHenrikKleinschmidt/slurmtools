@@ -57,86 +57,65 @@ def get_args():
     args = parser.parse_args()
     return args
 
-# setup the args by default
-args = get_args()
 
 
 def main():
 
-    # # args = get_args()
+    # setup the args by default
+    args = get_args()
 
+    # ----------------------------------------------------
+    # New Job Submission
+    # ----------------------------------------------------
     if args.command in ["new", "submit"]:
-        submit_new()
+        
+        submit( args.file, args )
 
+    # ----------------------------------------------------
+    # Kill Jobs
+    # ----------------------------------------------------
     if args.command in ["stop", "kill"]:
-        kill_job()
-    
+        
+        last = args.jobid == "last"
+        all = args.jobid == "all"
+        kill_job( args.jobid, all = all, last = last )
+
+    # ----------------------------------------------------
+    # Show Job Information
+    # ----------------------------------------------------
     if args.command in ["show", "info"]:
-        show_job()
-    
+        
+        if args.jobinfo == "all":
+            raw = show_all( raw = True )
+        elif args.jobinfo == "last":
+            raw = raw_job_info( last_submit.last_submit() )
+        else:
+            raw = raw_job_info( args.jobid )
+        print( raw )
+        
+    # ----------------------------------------------------
+    # Show Queue
+    # ----------------------------------------------------
     if args.command == "queue":
-        show_queue()
 
+        if not args.view:
+            raw = queue( all = args.all )
+            print( raw )
+        else:
+            view_queue( all = args.all, refresh = args.time )
+
+    # ----------------------------------------------------
+    # Interactive srun Session
+    # ----------------------------------------------------
     if args.command in ["interactive", "run"]:
-        start_session()
-
-
-
-def start_session():
-    """
-    The CLI function to start an interactive session
-    """
-    # args = get_args()
-    session.session( time = args.time, nodes = args.nodes, cores = args.cores, memory = args.memory, partition = args.partition, detach = args.detach )
-
-def show_queue():
-    """
-    The CLI function to show the job queue
-    """
-    # args = get_args()
-    if not args.view:
-        _static_queue()
-    else:
-        _view_queue()
-
-def _view_queue():
-    # args = get_args()
-    return queue.view_queue( all = args.all, refresh = args.time )
-
-def _static_queue():
-    # args = get_args()
-    raw = queue.queue( all = args.all )
-    print( raw )
-
-def show_job():
-    """
-    The CLI function to show job information
-    """
-    # args = get_args()
-    if args.jobinfo == "all":
-        raw = info.show_all( raw = True )
-    elif args.jobinfo == "last":
-        raw = info.raw_job_info( last_submit.last_submit() )
-    else:
-        raw = info.raw_job_info( args.jobid )
-    print( raw )
-
-def kill_job():
-    """
-    The CLI function to kill a job
-    """
-    # args = get_args()
-    last = args.jobid == "last"
-    all = args.jobid == "all"
-    kill.kill_job( args.jobid, all = all, last = last )
-
-def submit_new():
-    """
-    The CLI function to submit a new job
-    """
-    # args = get_args()
-    return submit.submit( args.file, args )
-    
+        session( 
+                    time = args.time, 
+                    nodes = args.nodes, 
+                    cores = args.cores, 
+                    memory = args.memory, 
+                    partition = args.partition, 
+                    detach = args.detach 
+                )
 
 if __name__ == "__main__":
     main()
