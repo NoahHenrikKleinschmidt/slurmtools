@@ -6,9 +6,9 @@ from .__init__ import *
 
 
 description = """
-    slurmtools is a toolset for slurm.
-    It provides a set of commands to manage slurm jobs,
-    and is a wrapper around the slurm command line interface.
+    slurmtools is a toolset to facilitate working with the SLURM job handler on HPC clusters.
+    It provides a set of commands to create, kill, or inspect slurm jobs, and handle the SLURM queue.
+    slurmtools is a wrapper around the native SLURM command line interface.
 """
 
 # setup the CLI parser
@@ -20,17 +20,18 @@ _new.add_argument( "file", help = "The job file to submit" )
 
 _kill = _command.add_parser( 'kill', help = 'Kill a job' )
 _kill.add_argument( "jobid", help = "The job-id to kill, or 'all' to kill all jobs, or 'last' to kill the last submitted job.", default = None )
+_kill.add_argument( "-p", "--pattern", help = "Kill all jobs matching a regex pattern in their name or id.", action = "store_true" )
 
 _info = _command.add_parser( 'info', help = 'Show job information' )
+_info.add_argument( "jobid", help = "The job-id, or 'all' for all jobs, or 'last' to select only last submitted job." )
 _info.add_argument( "-d","--details", help = "Show detailed job info. By default a shortened summary is shown.", action = "store_true" )
 _info.add_argument( "-a", "--all", help = "Show all jobs (including ones not from the user)", action = "store_true" )
+_info.add_argument( "-p", "--pattern", help = "Show infos to jobs matching a regex pattern in their name or id.", action = "store_true" )
 
 _read = _command.add_parser( 'read', help = "Read a job's stdout or stderr" )
-_read.add_argument( "-o", "--stdout", action  = 'store_true', help = "Read the stdout of the job (default)", default = True )
+_read.add_argument( "-o", "--stdout", action  = 'store_true', help = "Read the stdout of the job (default)", default = None )
 _read.add_argument( "-e", "--stderr", action  = 'store_true', help = "Read the stderr of the job", default = False )
-
-for p in ( _info, _read ):
-    p.add_argument( "jobid", help = "The job-id, or 'all' for all jobs, or 'last' to select only last submitted job." )
+_read.add_argument( "jobid", help = "The job-id whose stdout or stderr to read, or 'last' to read from the last submitted job." )
 
 _interactive = _command.add_parser( 'session', help = 'Start an interactive session' )
 _interactive.add_argument( "-d", "--detach", help = "Detach the session using tmux.", action = "store_true" )
@@ -73,15 +74,25 @@ def main():
     # ----------------------------------------------------
     if args.command == "kill" :
         
-        last = args.jobid == "last"
-        all = args.jobid == "all"
-        kill_job( args.jobid, all = all, last = last )
+        if args.pattern:
+            kill_by_pattern( args.jobid )
+        else:
+            last = args.jobid == "last"
+            all = args.jobid == "all"
+            kill_job( args.jobid, all = all, last = last )
 
     # ----------------------------------------------------
     # Show Job Information
     # ----------------------------------------------------
     if args.command == "info" :
         
+        if args.pattern:
+            raw = info_by_pattern( args.jobid, mine = not args.all, raw = args.details )
+            if not args.details:
+                raw = "\n\n".join( [ i._make_summary() for i in raw ] )
+            print( raw )
+            return            
+
         if args.jobid == "all":
             raw = show_all( mine = not args.all, raw = args.details )
             if not args.details:
@@ -92,7 +103,11 @@ def main():
         jobid = args.jobid
         if args.jobid == "last":
             jobid = last_submit()
-        
+
+            if jobid is None:
+                print( "No last job was found. Make sure that you submit jobs using 'slurmtools new' because 'sbatch' submitted jobs are not recorded!" )
+                return
+
         if args.details:
             raw = raw_job_info( jobid )
         else:
@@ -126,7 +141,6 @@ def main():
         else:
             srun_command = args.srun_cmd
         
-        
         session( 
                     scale = args.scale,
                     time = args.time, 
@@ -144,13 +158,19 @@ def main():
     # ----------------------------------------------------
     if args.command == "read" :
 
-        if args.stdout:
-            raw = read_stdout( args.jobid )
+        jobid = args.jobid
+        if jobid == "last":
+            jobid = last_submit()
+            if jobid is None:
+                print( "No last job was found. Make sure that you submit jobs using 'slurmtools new' because 'sbatch' submitted jobs are not recorded!" )
+                return
+    
+        if args.stdout or ( args.stdout is None and not args.stderr ):
+            raw = read_stdout( jobid )
             print( raw )
         if args.stderr:
-            raw = read_stderr( args.jobid )
+            raw = read_stderr( jobid )
             print( raw )
-
 
 
 if __name__ == "__main__":
