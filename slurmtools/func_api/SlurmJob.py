@@ -36,7 +36,7 @@ class SlurmJob:
         """
         Get user who submitted the job
         """
-        pattern = "Account=([a-zA-Z0-9-._]*) "
+        pattern = "Account=([a-zA-Z0-9 / _ \. \\ \-]*)"
         user = re.search( pattern, self.info ).group(1)
         return user
 
@@ -45,7 +45,7 @@ class SlurmJob:
         """
         Get job name
         """
-        pattern = "JobName=([a-zA-Z0-9_-:-. /]*) "
+        pattern = "JobName=([a-zA-Z0-9 / _ \. \\ \-]*)"
         name = re.search( pattern, self.info ).group(1)
         return name
     
@@ -54,7 +54,7 @@ class SlurmJob:
         """
         Get job state
         """
-        pattern = "JobState=([A-Z]*) "
+        pattern = "JobState=([A-Z]*)"
         state = re.search( pattern, self.info ).group(1)
         return state
     
@@ -63,7 +63,7 @@ class SlurmJob:
         """
         Get job time limit
         """
-        pattern = "TimeLimit=([0-9-:]*) "
+        pattern = "TimeLimit=([0-9 \- :]*)"
         time = re.search( pattern, self.info ).group(1)
         time = pd.to_datetime( time )
         return time
@@ -73,7 +73,7 @@ class SlurmJob:
         """
         Get job runtime
         """
-        pattern = "RunTime=([0-9-:]*) "
+        pattern = "RunTime=([0-9 \- :]*)"
         time = re.search( pattern, self.info ).group(1)
         time = pd.to_datetime( time )
         return time
@@ -83,7 +83,7 @@ class SlurmJob:
         """
         Get job nodes
         """
-        pattern = "Nodes=([a-zA-Z0-9_-:/., ]*) "
+        pattern = "Nodes=([a-zA-Z0-9 / _ \. \\ \-]*)"
         nodes = re.search( pattern, self.info ).group(1)
         return nodes
     
@@ -92,7 +92,7 @@ class SlurmJob:
         """
         Get the number of cores
         """
-        pattern = "NumCPUs=([0-9]*) "
+        pattern = "NumCPUs=([0-9]*)"
         cores = re.search( pattern, self.info ).group(1)
         cores = int( cores )
         return cores
@@ -102,7 +102,7 @@ class SlurmJob:
         """
         Get the memory assignment
         """
-        pattern = "Mem=([0-9]*) "
+        pattern = "Mem=([0-9]*)"
         memory = re.search( pattern, self.info ).group(1)
         memory = int( memory )
         return memory
@@ -112,7 +112,7 @@ class SlurmJob:
         """
         Get the partition
         """
-        pattern = "Partition=([a-zA-Z0-9_-:/.]*) "
+        pattern = "Partition=([a-zA-Z0-9 / _ \. \\ \-]*)"
         partition = re.search( pattern, self.info ).group(1)
         return partition
     
@@ -121,7 +121,7 @@ class SlurmJob:
         """
         Get the command
         """
-        pattern = "Command=([a-zA-Z0-9_-:\ ./]*) "
+        pattern = "Command=([a-zA-Z0-9 / _ \. \\ \-]*)"
         command = re.search( pattern, self.info ).group(1)
         return command
     
@@ -130,7 +130,7 @@ class SlurmJob:
         """
         Get the exit code
         """
-        pattern = "ExitCode=([0-9]*)"
+        pattern = "ExitCode=([0-9])"
         exit_code = re.search( pattern, self.info ).group(1)
         exit_code = int( exit_code )
         return exit_code
@@ -140,7 +140,7 @@ class SlurmJob:
         """
         Get the stdin
         """
-        pattern = "StdIn=([a-zA-Z0-9_-:\ ./]*) "
+        pattern = "StdIn=([a-zA-Z0-9 / _ \. \\ \-]*)"
         stdin = re.search( pattern, self.info ).group(1)
         return stdin
     
@@ -149,7 +149,7 @@ class SlurmJob:
         """
         Get the stdout
         """
-        pattern = "StdOut=([a-zA-Z0-9_-:\ ./]*) "
+        pattern = "StdOut=([a-zA-Z0-9 / _ \. \\ \-]*)"
         stdout = re.search( pattern, self.info ).group(1)
         return stdout
     
@@ -158,7 +158,7 @@ class SlurmJob:
         """
         Get the stderr
         """
-        pattern = "StdErr=([a-zA-Z0-9_-:\ ./]*) "
+        pattern = "StdErr=([a-zA-Z0-9 / _ \. \\ \-]*)"
         stderr = re.search( pattern, self.info ).group(1)
         return stderr
     
