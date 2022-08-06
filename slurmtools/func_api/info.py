@@ -2,10 +2,13 @@
 Show job info
 """
 
+import os
 import subprocess
 from datetime import datetime
 import pandas as pd
 import re
+
+from .last_submit import last_submit
 
 def show_all( mine : bool = True, raw : bool = False ): 
     """
@@ -156,7 +159,10 @@ class SlurmJob:
     """
     def __init__( self, id ):
         if isinstance( id, str ):
-            id = int( id )
+            if id == "last":
+                id = last_submit()
+            else:
+                id = int( id )
         elif isinstance( id, float ):
             id = int( id )
     
@@ -186,6 +192,23 @@ class SlurmJob:
         """
         string = self._make_summary()
         print( string )
+
+    def clear( self, stdout : bool = True, stderr : bool = True ):
+        """
+        Clear the stdout and stderr of the job. This will remove the job's 
+        stdout and stderr files if they exist.
+
+        Parameters
+        ----------
+        stdout : bool   
+            Remove the stdout file.
+        stderr : bool
+            Remove the stderr file.
+        """
+        if stdout and os.path.exists( self.stdout ):
+            os.remove( self.stdout )
+        if stderr and os.path.exists( self.stderr ):
+            os.remove( self.stderr )
 
     @property
     def jobid( self ) -> int:
