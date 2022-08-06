@@ -13,7 +13,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/NoahHenrikKleinschmidt/slurmtools.git",
-    packages=setuptools.find_packages(),
+
+    packages=setuptools.find_packages( where = "." ),
+
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
@@ -33,6 +35,10 @@ setuptools.setup(
                                 "myq = slurmtools.cli_shortcuts:myqueue",
 
                                 "qrun = slurmtools.cli_shortcuts:qrun",
+                                "qrunpy = slurmtools.cli_shortcuts:qrun_py",
+                                "qrunipy = slurmtools.cli_shortcuts:qrun_ipy",
+                                "qrunR = slurmtools.cli_shortcuts:qrun_R",
+
         ],
     },
 
