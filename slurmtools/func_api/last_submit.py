@@ -1,4 +1,4 @@
-_last_submit = [999099]
+_last_submit = [None]
 """The last submitted job id"""
 
 def last_submit( jobid = None ):
