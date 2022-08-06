@@ -32,6 +32,13 @@ for p in ( _info, _read ):
 
 _interactive = _command.add_parser( 'session', help = 'Start an interactive session' )
 _interactive.add_argument( "-d", "--detach", help = "Detach the session using tmux.", action = "store_true" )
+_interactive.add_argument( "-s", "--scale", help = "Use a pre-set scale for the interactive session. Use '-s h' / '--scale=h' to view available scales. ", default = None )
+_interactive.add_argument( "--name", help = "The name of the session. Defaults to the command used and a timestamp.", default = None )
+
+srun_command = _interactive.add_mutually_exclusive_group()
+srun_command.add_argument( "-py", "--python", help = "Activate a python terminal session.", action = "store_true", default = False )
+srun_command.add_argument( "-ipy", "--ipython", help = "Activate an ipython terminal session.", action = "store_true", default = False )
+srun_command.add_argument( "-r", "--R", help = "Activate an R terminal session.", action = "store_true", default = False )
 
 for p in ( _new, _interactive ) :
     p.add_argument( "-t", "--time", help = "The time limit of the job.", default = None )
@@ -72,10 +79,10 @@ def main():
     # ----------------------------------------------------
     if args.command == "info" :
         
-        if args.jobinfo == "all":
+        if args.jobid == "all":
             raw = show_all( raw = True )
-        elif args.jobinfo == "last":
-            raw = raw_job_info( last_submit.last_submit() )
+        elif args.jobid == "last":
+            raw = raw_job_info( last_submit() )
         else:
             raw = raw_job_info( args.jobid )
         print( raw )
@@ -95,13 +102,26 @@ def main():
     # Interactive srun Session
     # ----------------------------------------------------
     if args.command == "session" :
+        
+        if args.python:
+            srun_command = "python"
+        elif args.ipython:
+            srun_command = "ipython"
+        elif args.R:
+            srun_command = "R"
+        else:
+            srun_command = "bash"
+
         session( 
+                    scale = args.scale,
                     time = args.time, 
-                    nodes = args.nodes, 
-                    cores = args.cores, 
+                    cpu = args.cores, 
                     memory = args.memory, 
+                    detach = args.detach,
                     partition = args.partition, 
-                    detach = args.detach 
+                    nodes = args.nodes, 
+                    cmd = srun_command,
+                    name = args.name,
                 )
 
     # ----------------------------------------------------
