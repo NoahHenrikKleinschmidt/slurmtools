@@ -4,36 +4,37 @@ Interactive slurm sessions (srun) wrapper.
 
 import subprocess
 from datetime import datetime
-import os
 
-def current_conda_env():
-    """
-    Get the current conda environment.
-    """
-    env = os.environ[ "CONDA_DEFAULT_ENV" ]
-    return env
+# import os
 
-def activate_conda_env( env_name : str, execute : bool = True ):
-    """
-    Activate a conda environment.
+# def current_conda_env():
+#     """
+#     Get the current conda environment.
+#     """
+#     env = os.environ[ "CONDA_DEFAULT_ENV" ]
+#     return env
 
-    Parameters
-    ----------
-    env_name : str
-        The name of the conda environment.
-    execute : bool
-        Execute the command.
+# def activate_conda_env( env_name : str, execute : bool = True ):
+#     """
+#     Activate a conda environment.
+
+#     Parameters
+#     ----------
+#     env_name : str
+#         The name of the conda environment.
+#     execute : bool
+#         Execute the command.
     
-    Returns
-    -------
-    str or None
-        The command to activate the conda environment (if not executed).
-    """
-    cmd = f"conda activate {env_name}"
-    if execute:
-        subprocess.run( cmd, shell = True )
-    else:
-        return cmd
+#     Returns
+#     -------
+#     str or None
+#         The command to activate the conda environment (if not executed).
+#     """
+#     cmd = f"conda activate {env_name}"
+#     if execute:
+#         subprocess.run( cmd, shell = True )
+#     else:
+#         return cmd
 
 scales = {
 
@@ -205,12 +206,6 @@ def session(
 tmux new -s {name} "{cmd}"  
 tmux attach -t {name}    
 """.strip()
-
-    # the conda environment gets reset when using bash!
-    # if keep_conda_env:
-    #     env = current_conda_env()
-    #     env = activate_conda_env( env, execute = False )
-    #     cmd = f"{cmd}\n{env}"
 
     subprocess.run( cmd, shell = True )
 
