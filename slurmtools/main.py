@@ -39,6 +39,7 @@ srun_command = _interactive.add_mutually_exclusive_group()
 srun_command.add_argument( "-py", "--python", help = "Activate a python terminal session.", action = "store_true", default = False )
 srun_command.add_argument( "-ipy", "--ipython", help = "Activate an ipython terminal session.", action = "store_true", default = False )
 srun_command.add_argument( "-r", "--R", help = "Activate an R terminal session.", action = "store_true", default = False )
+srun_command.add_argument( "-cmd", "--command", dest = "srun_cmd", help = "The command to run in the srun session. By default 'bash' is used.", default = "bash" )
 
 for p in ( _new, _interactive ) :
     p.add_argument( "-t", "--time", help = "The time limit of the job.", default = None )
@@ -110,8 +111,9 @@ def main():
         elif args.R:
             srun_command = "R"
         else:
-            srun_command = "bash"
-
+            srun_command = args.srun_cmd
+        
+        
         session( 
                     scale = args.scale,
                     time = args.time, 
