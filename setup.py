@@ -1,4 +1,3 @@
-from importlib_metadata import entry_points
 import setuptools
 
 with open("README.md", "r") as f:
@@ -26,6 +25,7 @@ setuptools.setup(
 
         "console_scripts": [
                                 "slurmtools = slurmtools.main:main",
+                                "stools = slurmtools.main:main",
 
                                 "viewmyqueue = slurmtools.cli_shortcuts:viewmyqueue",
                                 "viewmyq = slurmtools.cli_shortcuts:viewmyqueue",
