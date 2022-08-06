@@ -2,7 +2,8 @@
 Functions to read the stdout or stderr of a job.
 """
 
-from .SlurmJob import SlurmJob
+import os
+from .info import SlurmJob
 
 def read_stdout( jobid : int ) -> str:
     """
@@ -19,9 +20,15 @@ def read_stdout( jobid : int ) -> str:
         The stdout of the job.
     """
     job = SlurmJob( jobid )
-    with open( job.stdout , "r" ) as f:
-        stdout = f.read()
+    if os.path.exists( job.stdout ):
+        with open( job.stdout , "r" ) as f:
+            stdout = f.read()
+    else:
+        print( "The stdout file does not exist (yet)." ) 
+        return
     return stdout
+
+
 
 def read_stderr( jobid : int ) -> str:
     """
@@ -38,6 +45,10 @@ def read_stderr( jobid : int ) -> str:
         The stderr of the job.
     """
     job = SlurmJob( jobid )
-    with open( job.stderr , "r" ) as f:
-        stderr = f.read()
+    if os.path.exists( job.stderr ):
+        with open( job.stderr , "r" ) as f:
+            stderr = f.read()
+    else:
+        print( "The stderr file does not exist (yet)." ) 
+        return
     return stderr
