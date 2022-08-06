@@ -22,6 +22,8 @@ _kill = _command.add_parser( 'kill', help = 'Kill a job' )
 _kill.add_argument( "jobid", help = "The job-id to kill, or 'all' to kill all jobs, or 'last' to kill the last submitted job.", default = None )
 
 _info = _command.add_parser( 'info', help = 'Show job information' )
+_info.add_argument( "-d","--details", help = "Show detailed job info. By default a shortened summary is shown.", action = "store_true" )
+_info.add_argument( "-a", "--all", help = "Show all jobs (including ones not from the user)", action = "store_true" )
 
 _read = _command.add_parser( 'read', help = "Read a job's stdout or stderr" )
 _read.add_argument( "-o", "--stdout", action  = 'store_true', help = "Read the stdout of the job (default)", default = True )
@@ -81,11 +83,22 @@ def main():
     if args.command == "info" :
         
         if args.jobid == "all":
-            raw = show_all( raw = True )
-        elif args.jobid == "last":
-            raw = raw_job_info( last_submit() )
+            raw = show_all( mine = not args.all, raw = args.details )
+            if not args.details:
+                raw = "\n\n".join( [ i._make_summary() for i in raw ] )
+            print( raw )
+            return
+
+        jobid = args.jobid
+        if args.jobid == "last":
+            jobid = last_submit()
+        
+        if args.details:
+            raw = raw_job_info( jobid )
         else:
-            raw = raw_job_info( args.jobid )
+            raw = job_info( jobid )
+            raw = raw._make_summary()
+       
         print( raw )
         
     # ----------------------------------------------------
