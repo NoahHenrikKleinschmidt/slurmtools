@@ -55,6 +55,10 @@ slurmtools queue --view --time=5
 > - `viewmyq`
 > - `vmyq`
 
+> #### Repeated-queue issues?
+> The "refreshing" queue just echoes one view after the other but never actually removes the old ones?!
+> This can sometimes happen. Usually, using `clear` and resubmitting the queue command fixes this behavior.
+
 The *srun sessions* are configurable but also come with a
 number of preset specs that can directly be called upon to avoid the need to manually specify resources.
 
