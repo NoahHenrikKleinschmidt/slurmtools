@@ -41,7 +41,7 @@ def view_queue( all : bool = False, refresh : int = 5 ):
         queue_cmd += " -A $USER"
         metadata = ("$USER", "'s queue @ ")
     else:
-        metadata = ("All jobs", "queued @ ")
+        metadata = ("All jobs", " queued @ ")
         
     cmd = f"""
 sleeptime={refresh}
@@ -75,4 +75,7 @@ while [[ 1 -eq 1 ]]; do
 
     done
     """.strip()
-    subprocess.run( cmd, shell = True )
+    try: 
+        subprocess.run( cmd, shell = True )
+    except KeyboardInterrupt:
+        print( "Closing view..." )
