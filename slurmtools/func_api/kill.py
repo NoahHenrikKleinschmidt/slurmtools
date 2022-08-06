@@ -3,7 +3,7 @@ Kill a slurm job
 """
 
 import subprocess
-from . import last_submit
+from . import last_submit, reset_last_submit
 
 def kill_last():
     """
@@ -33,7 +33,8 @@ def kill_job( jobid : str = None, all : bool = False, last : bool = False ):
     if all: 
         cmd = "-A $USER"
     elif last:
-        cmd = f"{last_submit.last_submit()}"
+        cmd = f"{last_submit()}"
+        reset_last_submit()
     else:
         cmd = f"{jobid}"
     cmd = f"scancel {cmd}"

@@ -72,7 +72,7 @@ def submit( filename, args ):
     newjob = subprocess.run( cmd, shell = True, capture_output = True )
     
     newjob = extract_jobid(newjob) 
-    last_submit.last_submit( newjob )
+    last_submit( newjob )
     
     return newjob
 
