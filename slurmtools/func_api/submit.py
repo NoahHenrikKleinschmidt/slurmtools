@@ -3,7 +3,7 @@ Submit a new slurm job
 """
 
 import subprocess
-from . import last_submit
+from .last_submit import last_submit
 
 class CmdArgs:
     """
@@ -47,7 +47,7 @@ class CmdArgs:
         self.memory = d.get( "memory", None )
         self.partition = d.get( "partition", None )
 
-def submit( filename, args ):
+def submit( filename : str, args ) -> int:
     """
     Submit a new slurm job
 
@@ -55,7 +55,11 @@ def submit( filename, args ):
     ----------
     filename : str
         The name of the job file.
-    
+    args : CmdArgs
+        The arguments to pass to the job.
+        This can have attributes for `time`, 
+        `nodes`, `cores`, `memory`, and `partition`.
+
     Returns
     -------
     jobid : str
@@ -76,12 +80,17 @@ def submit( filename, args ):
     
     return newjob
 
-def extract_jobid(msg):
+def extract_jobid( msg ) -> int:
     """
     Extracts the jobid from the slurm submission message.
 
     Parameters
     ----------
+    msg : CompletedProcess
+        The slurm submission message as raw output from `subprocess.run`.
+    
+    Returns
+    -------
     jobid : int
         The job-id of the submitted job.
     """
