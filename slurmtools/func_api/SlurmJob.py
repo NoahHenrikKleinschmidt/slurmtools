@@ -231,7 +231,7 @@ User:       {self.user}
 State:      {self.state} {state_reason}
 
 Runtime:    {self.time.time()}
-Time limit: {self.end} ({self.time_remaining})
+Time limit: {self.time_remaining} ({self.end})
 
 {filler}
 Technical Info
