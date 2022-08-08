@@ -8,6 +8,10 @@ from datetime import datetime
 import pandas as pd
 import re
 
+import logging
+
+logger = logging.getLogger( "slurmtools" )
+
 from .last_submit import last_submit
 
 def show_all( mine : bool = True, raw : bool = False ): 
@@ -260,13 +264,22 @@ class SlurmJob:
         return state
 
     @property
-    def time( self ) -> pd.Timestamp:
+    def time( self ) -> pd.Timedelta:
         """
         Get job runtime
         """
         pattern = "RunTime=([0-9 \- :]*)"
         time = re.search( pattern, self.info ).group(1)
-        time = pd.to_datetime( time )
+        try: 
+            days = 0
+            if "-" in time:
+                days, time = time.split("-")
+                days = int(days)
+            hours, minutes, seconds = tuple( map( int, time.split(":") ) ) 
+            time = pd.Timedelta( days=days, hours=hours, minutes=minutes, seconds=seconds )
+                
+        except Exception as e:
+            logger.debug( e )
         return time
     
     @property
@@ -276,7 +289,10 @@ class SlurmJob:
         """
         pattern = "StartTime=([0-9T \- :]*)"
         time = re.search( pattern, self.info ).group(1)
-        time = pd.to_datetime( time )
+        try: 
+            time = pd.to_datetime( time )
+        except Exception as e:
+            logger.debug( e )
         return time
     
     @property
@@ -286,7 +302,10 @@ class SlurmJob:
         """
         pattern = "EndTime=([0-9T \- :]*)"
         time = re.search( pattern, self.info ).group(1)
-        time = pd.to_datetime( time )
+        try: 
+            time = pd.to_datetime( time )
+        except Exception as e:
+            logger.debug( e )
         return time
 
     @property
@@ -294,8 +313,14 @@ class SlurmJob:
         """
         Get job's time remaining to finish
         """
-        return self.end - datetime.now()
-
+        try:
+            remaining = self.end - datetime.now()
+            remaining = remaining.round( "S" )
+            return remaining
+        except Exception as e:
+            logger.debug( e )
+            logger.warning( "Could not establish remaining time. Probably due to unknown string format in end time.")
+            return None
     @property
     def nodes( self ) -> str:
         """
@@ -420,7 +445,7 @@ Job Name:   {self.name}
 User:       {self.user}
 State:      {self.state} {state_reason}
 
-Runtime:    {self.time.time()}
+Runtime:    {self.time}
 Time limit: {self.time_remaining} ({self.end})
 
 Stdin:      {self.stdin}
