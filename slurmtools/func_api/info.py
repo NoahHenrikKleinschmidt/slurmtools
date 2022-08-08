@@ -440,6 +440,7 @@ class SlurmJob:
 {filler}
 General Info
 {filler}
+
 Job ID:     {self.id}
 Job Name:   {self.name}
 User:       {self.user}
@@ -448,12 +449,15 @@ State:      {self.state} {state_reason}
 Runtime:    {self.time}
 Time limit: {self.time_remaining} ({self.end})
 
+{filler}
+Technical Info
+{filler}
+Cmd:        {self.command}
 Stdin:      {self.stdin}
 Stdout:     {self.stdout}
 Stderr:     {self.stderr}
-
 {filler}
-Technical Info
+Resource Info
 {filler}
 Nodes:      {self.nodes}
 Cores:      {self.cores}
