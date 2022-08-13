@@ -2,6 +2,7 @@
 Show job info
 """
 
+import glob
 import os
 import subprocess
 from datetime import datetime
@@ -126,6 +127,20 @@ def raw_job_info( jobid : int ):
     cmd = f"scontrol show jobid -dd {jobid}"
     jobinfo = subprocess.run( cmd, shell = True, capture_output = True )
     jobinfo = jobinfo.stdout.decode("utf-8")
+
+    # if we don't get anything from scontrol, then perhaps there is a 
+    # file with the jobid in its name.
+    if jobinfo == "":
+        jobinfo = glob.glob( f"*{jobid}*" )
+        if jobinfo != []:
+            if len(jobinfo) > 1:
+                logger.warning( f"Found multiple files with jobid {jobid}. Reading only the first match ({jobinfo[0]})." )
+            jobinfo = jobinfo[0]
+            jobinfo = subprocess.run( f"cat {jobinfo}", shell = True, capture_output = True )
+            jobinfo = jobinfo.stdout.decode("utf-8")
+        else:
+            jobinfo = "No stdout file for the job could be found. This can happen if the job is no longer accessible via scontrol and used a non-default stdout file..."
+
     return jobinfo
 
 def job_summary( jobid : int ):
