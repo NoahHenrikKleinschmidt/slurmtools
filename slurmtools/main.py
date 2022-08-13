@@ -57,7 +57,7 @@ def setup_parser():
     _queue.add_argument( "-a", "--all", action = "store_true", help = "Show all jobs. By default only the user's jobs are shown.", default = False )
     _queue.add_argument( "-v", "--view", action = "store_true", help = "Keep the queue open as a self-refreshing view" )
     _queue.add_argument( "-t", "--time", type = int, help = "The number of seconds to wait between refreshs (default = 5s)", default = 5 )
-
+    _queue.add_argument( "-n", "--njobs", type = int, help = "The number of jobs to show at once. Default is 20. The window is scrollable.", default = 20 )
     return parser
 
 def main():
@@ -137,7 +137,7 @@ def main():
             raw = queue( all = args.all )
             print( raw )
         else:
-            view_queue( all = args.all, refresh = args.time )
+            view_queue( all = args.all, refresh = args.time, n = args.njobs )
 
     # ----------------------------------------------------
     # Interactive srun Session
