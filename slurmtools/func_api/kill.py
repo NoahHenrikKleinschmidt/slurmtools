@@ -104,6 +104,7 @@ def kill_job( jobid : int = None, all : bool = False, last : bool = False, clear
     elif last:
         cmd = last_submit()
         reset_last_submit()
+        jobid = cmd
     else:
         cmd = f"-A $USER {jobid}" 
     cmd = f"scancel {cmd}"
