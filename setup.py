@@ -27,17 +27,17 @@ setuptools.setup(
                                 "slurmtools = slurmtools.main:main",
                                 "stools = slurmtools.main:main",
 
-                                "viewmyqueue = slurmtools.cli_shortcuts:viewmyqueue",
-                                "viewmyq = slurmtools.cli_shortcuts:viewmyqueue",
-                                "vmyq = slurmtools.cli_shortcuts:viewmyqueue",
+                                "viewmyqueue = slurmtools._cli_shortcuts:viewmyqueue",
+                                "viewmyq = slurmtools._cli_shortcuts:viewmyqueue",
+                                "vmyq = slurmtools._cli_shortcuts:viewmyqueue",
 
-                                "myqueue = slurmtools.cli_shortcuts:myqueue",
-                                "myq = slurmtools.cli_shortcuts:myqueue",
+                                "myqueue = slurmtools._cli_shortcuts:myqueue",
+                                "myq = slurmtools._cli_shortcuts:myqueue",
 
-                                "qrun = slurmtools.cli_shortcuts:qrun",
-                                "qrunpy = slurmtools.cli_shortcuts:qrun_py",
-                                "qrunipy = slurmtools.cli_shortcuts:qrun_ipy",
-                                "qrunR = slurmtools.cli_shortcuts:qrun_R",
+                                "qrun = slurmtools._cli_shortcuts:qrun",
+                                "qrunpy = slurmtools._cli_shortcuts:qrun_py",
+                                "qrunipy = slurmtools._cli_shortcuts:qrun_ipy",
+                                "qrunR = slurmtools._cli_shortcuts:qrun_R",
 
         ],
     },
