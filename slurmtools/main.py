@@ -17,7 +17,7 @@ def setup_parser():
     _command = parser.add_subparsers( dest = "command" )
 
     _new = _command.add_parser( 'new', help = 'Submit a new job' )
-    _new.add_argument( "file", help = "The job file to submit" )
+    _new.add_argument( "file", help = "The job file to submit including all additional arguments.", nargs = "+" )
 
     _kill = _command.add_parser( 'kill', help = 'Kill a job' )
     _kill.add_argument( "jobid", help = "The job-id to kill, or 'all' to kill all jobs, or 'last' to kill the last submitted job.", default = None )
@@ -71,6 +71,7 @@ def main():
     # ----------------------------------------------------
     if args.command == "new" :
         
+        args.file = " ".join( args.file )
         newjob = submit( args.file, args )
         print( f"New job submitted with id {newjob}" )
 
